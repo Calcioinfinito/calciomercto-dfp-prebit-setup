@@ -3,6 +3,29 @@
 # Setup Tool for Prebid and GAM (previously DFP)
 An automated line item generator for [Prebid.js](http://prebid.org/) and Google Ad Manager (previously DFP)
 
+## Setup
+
+`use python 2`
+
+```
+virtualenv env -p python2
+```
+
+(for unix like machines)
+```
+source env/bin/activate
+```
+
+(for mingw on windows machines)
+```
+source env/Scripts/activate
+```
+
+install dependecies
+```
+pip install -r requirements.txt
+```
+
 ## Overview
 When setting up Prebid, your ad ops team often has to create [hundreds of line items](http://prebid.org/adops.html) in Google Ad Manager (GAM).
 
