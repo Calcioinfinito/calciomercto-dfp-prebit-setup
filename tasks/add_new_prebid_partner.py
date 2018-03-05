@@ -10,6 +10,8 @@ from pprint import pprint
 from colorama import init
 
 import settings
+import dfp.activate_line_items
+import dfp.approve_order
 import dfp.associate_line_items_and_creatives
 import dfp.create_custom_targeting
 import dfp.create_creatives
@@ -49,7 +51,7 @@ logger = logging.getLogger(__name__)
 
 
 def setup_partner(user_email, advertiser_name, order_name, placements,
-    sizes, bidder_code, prices, num_creatives, currency_code):
+    sizes, bidder_code, hb_price_bucket, hb_biddercode, prices, num_creatives, currency_code):
   """
   Call all necessary DFP tasks for a new Prebid partner setup.
   """
@@ -69,16 +71,16 @@ def setup_partner(user_email, advertiser_name, order_name, placements,
 
   # Create creatives.
   creative_configs = dfp.create_creatives.create_duplicate_creative_configs(
-      bidder_code, order_name, advertiser_id, num_creatives)
+    hb_biddercode, bidder_code, order_name, advertiser_id, num_creatives)
   creative_ids = dfp.create_creatives.create_creatives(creative_configs)
 
   # Get DFP key IDs for line item targeting.
-  hb_bidder_key_id = get_or_create_dfp_targeting_key('hb_bidder')
-  hb_pb_key_id = get_or_create_dfp_targeting_key('hb_pb')
+  hb_bidder_key_id = get_or_create_dfp_targeting_key(hb_biddercode)
+  hb_pb_key_id = get_or_create_dfp_targeting_key(hb_price_bucket)
 
   # Instantiate DFP targeting value ID getters for the targeting keys.
-  HBBidderValueGetter = DFPValueIdGetter('hb_bidder')
-  HBPBValueGetter = DFPValueIdGetter('hb_pb')
+  HBBidderValueGetter = DFPValueIdGetter(hb_biddercode)
+  HBPBValueGetter = DFPValueIdGetter(hb_price_bucket)
 
   # Create line items.
   line_items_config = create_line_item_configs(prices, order_id,
@@ -90,6 +92,9 @@ def setup_partner(user_email, advertiser_name, order_name, placements,
   # Associate creatives with line items.
   dfp.associate_line_items_and_creatives.make_licas(line_item_ids,
     creative_ids, size_overrides=sizes)
+
+  # dfp.approve_order.approve(order_id)
+  dfp.activate_line_items.activate(order_id)
 
   logger.info("""
 
@@ -186,7 +191,7 @@ def create_line_item_configs(prices, order_id, placement_ids, bidder_code,
     price_str = num_to_str(micro_amount_to_num(price))
 
     # Autogenerate the line item name.
-    line_item_name = u'{bidder_code}: HB ${price}'.format(
+    line_item_name = u'{bidder_code}: HB €{price}'.format(
       bidder_code=bidder_code,
       price=price_str
     )
@@ -230,7 +235,7 @@ def check_price_buckets_validity(price_buckets):
   except KeyError:
     raise BadSettingException('The setting "PREBID_PRICE_BUCKETS" '
       'must contain keys "precision", "min", "max", and "increment".')
-  
+
   if not (isinstance(pb_precision, int) or isinstance(pb_precision, float)):
     raise BadSettingException('The "precision" key in "PREBID_PRICE_BUCKETS" '
       'must be a number.')
@@ -268,7 +273,7 @@ def main():
   user_email = getattr(settings, 'DFP_USER_EMAIL_ADDRESS', None)
   if user_email is None:
     raise MissingSettingException('DFP_USER_EMAIL_ADDRESS')
-   
+
   advertiser_name = getattr(settings, 'DFP_ADVERTISER_NAME', None)
   if advertiser_name is None:
     raise MissingSettingException('DFP_ADVERTISER_NAME')
@@ -304,6 +309,14 @@ def main():
   bidder_code = getattr(settings, 'PREBID_BIDDER_CODE', None)
   if bidder_code is None:
     raise MissingSettingException('PREBID_BIDDER_CODE')
+
+  hb_price_bucket = getattr(settings, 'HB_PRICE_BUCKET', None)
+  if hb_price_bucket is None:
+    raise MissingSettingException('HB_PRICE_BUCKET')
+
+  hb_biddercode = getattr(settings, 'HB_BIDDERCODE', None)
+  if hb_biddercode is None:
+    raise MissingSettingException('HB_BIDDERCODE')
 
   price_buckets = getattr(settings, 'PREBID_PRICE_BUCKETS', None)
   if price_buckets is None:
@@ -354,10 +367,13 @@ def main():
     placements,
     sizes,
     bidder_code,
+    hb_price_bucket,
+    hb_biddercode,
     prices,
     num_creatives,
     currency_code,
   )
+
 
 if __name__ == '__main__':
   main()

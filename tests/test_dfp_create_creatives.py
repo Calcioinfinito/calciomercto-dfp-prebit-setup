@@ -19,6 +19,7 @@ class DFPCreateCreativesTests(TestCase):
 
     creative_configs = [
       dfp.create_creatives.create_creative_config(
+        hb_biddercode='hb_bidder',
         name='My Creative',
         advertiser_id=1234567,
       )
@@ -45,6 +46,7 @@ class DFPCreateCreativesTests(TestCase):
 
     self.assertEqual(
       dfp.create_creatives.create_creative_config(
+        hb_biddercode='hb_bidder',
         name='My Creative',
         advertiser_id=1234567,
       ),
@@ -138,13 +140,14 @@ class DFPCreateCreativesTests(TestCase):
     # Mock the actual creative config.
     mock_create_creative_config.return_value = {'advertiserId': 12345}
 
+    hb_biddercode = 'hb_bidder'
     bidder_code = 'somebidder'
     order_name = 'An order'
     advertiser_id = 12345
     creative_num = 4
 
     configs = dfp.create_creatives.create_duplicate_creative_configs(
-      bidder_code, order_name, advertiser_id, creative_num)
+      hb_biddercode, bidder_code, order_name, advertiser_id, creative_num)
 
     # Assert we created the correct number of configs.
     self.assertEqual(mock_create_creative_config.call_count, creative_num)

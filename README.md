@@ -5,11 +5,7 @@ An automated line item generator for [Prebid.js](http://prebid.org/) and Google 
 
 ## Setup
 
-<<<<<<< Updated upstream
-`use python 2`
-=======
 `use python 3`
->>>>>>> Stashed changes
 
 ```
 virtualenv env -p python3

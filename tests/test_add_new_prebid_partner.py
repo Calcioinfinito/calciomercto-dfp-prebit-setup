@@ -26,6 +26,8 @@ sizes = [
   },
 ]
 bidder_code = 'mypartner'
+hb_price_bucket = 'hb_price_bucket'
+hb_biddercode = 'hb_biddercode'
 price_buckets = {
   'precision': 2,
   'min' : 0,
@@ -230,6 +232,8 @@ class AddNewPrebidPartnerTests(TestCase):
       order_name=order,
       placements=placements,
       bidder_code=bidder_code,
+      hb_price_bucket=hb_price_bucket,
+      hb_biddercode=hb_biddercode,
       sizes=sizes,
       prices=prices,
       num_creatives=2,
