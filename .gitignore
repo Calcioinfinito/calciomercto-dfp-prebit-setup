@@ -9,3 +9,4 @@ secret-files.tar
 local_settings.py
 .idea/
 env/
+key/
