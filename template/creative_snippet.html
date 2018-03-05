@@ -4,7 +4,8 @@ for (i = 0; i < 10; i++) {
   w = w.parent;
   if (w.pbjs) {
     try {
-      w.pbjs.renderAd(document, '%%PATTERN:hb_adid%%');
+      w.pbjs.renderAd(document, '%%PATTERN:hb_adid_appnexus%%');
+      w.pbjs.renderAd(document, '%%PATTERN:{{ hb_adid }%%');
       break;
     } catch (e) {
       continue;
