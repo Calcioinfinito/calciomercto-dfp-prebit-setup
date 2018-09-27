@@ -5,9 +5,10 @@ from dfp.client import get_client
 def execute(order_id):
     dfp_client = get_client()
 
-    line_item_service = dfp_client.GetService('LineItemService', version='v201702')
+    line_item_service = dfp_client.GetService('LineItemService', version='v201802')
 
-    query = "WHERE isMissingCreatives = :isMissingCreatives AND orderId = :orderId"
+    # query = "WHERE isMissingCreatives = :isMissingCreatives AND orderId = :orderId"
+    query = "WHERE orderId = :orderId"
 
     values = [
         # {
@@ -17,13 +18,13 @@ def execute(order_id):
         #         'value': 'INACTIVE'
         #     }
         # },
-        {
-            'key': 'isMissingCreatives',
-            'value': {
-                'xsi_type': 'BooleanValue',
-                'value': True
-            }
-        },
+        # {
+        #     'key': 'isMissingCreatives',
+        #     'value': {
+        #         'xsi_type': 'BooleanValue',
+        #         'value': True
+        #     }
+        # },
         {
             'key': 'orderId',
             'value': {
@@ -38,7 +39,7 @@ def execute(order_id):
 
     line_item_ids = []
     if 'results' in response:
-        for line_item in response['results'][:200]:
+        for line_item in response['results']:
             line_item_ids.append(line_item['id'])
 
     return line_item_ids

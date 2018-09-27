@@ -5,7 +5,7 @@ from dfp.client import get_client
 def approve(order_id):
     dfp_client = get_client()
 
-    order_service = dfp_client.GetService('OrderService', version='v201702')
+    order_service = dfp_client.GetService('OrderService', version='v201802')
 
     query = "WHERE orderId = (%s)" % int(order_id)
     statement = dfp.FilterStatement(query)

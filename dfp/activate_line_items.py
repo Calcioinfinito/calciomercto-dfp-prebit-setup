@@ -5,7 +5,7 @@ from dfp.client import get_client
 def activate(order_id):
     dfp_client = get_client()
 
-    line_item_service = dfp_client.GetService('LineItemService', version='v201702')
+    line_item_service = dfp_client.GetService('LineItemService', version='v201802')
 
     query = "WHERE status = 'INACTIVE' AND orderId = (%s)" % int(order_id)
     statement = dfp.FilterStatement(query)
