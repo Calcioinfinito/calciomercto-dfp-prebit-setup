@@ -9,14 +9,14 @@ GOOGLEADS_YAML_FILE = os.path.join(ROOT_DIR, 'googleads.yaml')
 #########################################################################
 
 # A string describing the order
-DFP_ORDER_NAME = 'prebid_appnexus4'
+DFP_ORDER_NAME = 'prebid_teads5'
 
 # The email of the DFP user who will be the trafficker for
 # the created order
-DFP_USER_EMAIL_ADDRESS = None
+DFP_USER_EMAIL_ADDRESS = 'masotti79@gmail.com'
 
 # The exact name of the DFP advertiser for the created order
-DFP_ADVERTISER_NAME = 'AppNexus'
+DFP_ADVERTISER_NAME = 'Teads'
 
 # Names of placements the line items should target.
 DFP_TARGETED_PLACEMENT_NAMES = ['hb_placements']
@@ -82,13 +82,13 @@ DFP_CURRENCY_CODE = 'EUR'
 # PREBID SETTINGS
 #########################################################################
 
-PREBID_BIDDER_CODE = 'appnexus'
+PREBID_BIDDER_CODE = 'teads'
 
 # HB_PRICE_BUCKET = 'hb_pb'
-HB_PRICE_BUCKET = 'hb_pb_appnexus'
+HB_PRICE_BUCKET = 'hb_pb_teads'
 
 # HB_BIDDERCODE = 'hb_bidder'
-HB_BIDDERCODE = 'hb_adid_appnexus'
+HB_BIDDERCODE = 'hb_adid_teads'
 
 # Price buckets. This should match your Prebid settings for the partner. See:
 # http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setPriceGranularity
